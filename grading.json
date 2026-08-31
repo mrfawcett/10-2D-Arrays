@@ -1,0 +1,5 @@
+[
+ {"test": "TheaterTest",      "name": "Theater constructor", "points": 30},
+ {"test": "ReassignSeatTest", "name": "reassignSeat",        "points": 35},
+ {"test": "ToStringTest",     "name": "toString",            "points": 35}
+]
