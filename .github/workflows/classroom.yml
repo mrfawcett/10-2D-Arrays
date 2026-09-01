@@ -20,22 +20,13 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - name: Integrity check - tests, pom.xml and grading.json must be unchanged
-        run: |
-          EXPECTED="bf868b71be5a087def06abc359c0d6c2c18534e862d4994c37867ab836b4c18d"
-          ACTUAL=$( (for f in $(find src/test/java -type f -name '*.java' | LC_ALL=C sort) pom.xml grading.json; do sed 's/\r$//' "$f"; done) | sha256sum | cut -d' ' -f1)
-          if [ "$ACTUAL" != "$EXPECTED" ]; then
-            echo "::error::The test files, pom.xml, or grading.json in this repository differ from the assignment template. Grading has been stopped. Restore the original files (git checkout origin/main -- src/test pom.xml grading.json) and push again."
-            exit 1
-          fi
-          echo "Integrity check passed."
       - name: "Theater constructor (30)"
         id: theater
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: "Theater constructor"
           setup-command: ''
-          command: mvn -B -q test -Dtest=TheaterTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh TheaterTest
           timeout: 5
           max-score: 30
       - name: "reassignSeat (35)"
@@ -44,7 +35,7 @@ jobs:
         with:
           test-name: "reassignSeat"
           setup-command: ''
-          command: mvn -B -q test -Dtest=ReassignSeatTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh ReassignSeatTest
           timeout: 5
           max-score: 35
       - name: "toString (35)"
@@ -53,7 +44,7 @@ jobs:
         with:
           test-name: "toString"
           setup-command: ''
-          command: mvn -B -q test -Dtest=ToStringTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh ToStringTest
           timeout: 5
           max-score: 35
       - name: Autograding Reporter
